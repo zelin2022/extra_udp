@@ -47,3 +47,5 @@ _deps
 /build/
 # output directory
 /output/
+# test directory
+/test/

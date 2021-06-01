@@ -1,0 +1,36 @@
+/*
+* Filename: extra_udp.hpp
+* Author: Zelin Liu
+* Date: 2021/05/24
+* Description:
+* Instruction:
+* Copyright (c). All rights reserved.
+*/
+
+
+#ifndef _EXTRA_UDP_EXTRA_UDP_HPP_
+#define _EXTRA_UDP_EXTRA_UDP_HPP_
+#include "node.hpp"
+#include <vector>
+#include <string>
+#include <numeric>
+
+
+class Extra_UDP{
+public:
+  Extra_UDP(Node & mynode);
+  ~Extra_UDP();
+  ssize_t send(Node *dest, std::vector<unsigned char> *msg);
+  ssize_t recv(Node *src, void* store_location);
+private:
+  int sock;
+  char *meta_buffer;
+  void init_sock(Node & mynode);
+  const std::vector<std::pair<std::string, uint16_t>> header_format{
+<% src_config.each do |one_conf| %>
+    <%= %Q|std::pair<std::string, uint16_t>{std::string("#{one_conf[0]}"), #{one_conf[1]}},\n| %>
+<% end %>
+  };
+  const uint16_t header_size = std::accumulate(this->header_format.begin(), this->header_format.end(), 0, [](size_t sum, const std::pair<std::string, uint16_t> p){return sum + p.second;});
+};
+#endif

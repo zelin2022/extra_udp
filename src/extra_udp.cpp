@@ -20,6 +20,16 @@
 #include <system_error>
 
 Extra_UDP::Extra_UDP(Node &mynode){
+  this->init_sock(mynode);
+  this->meta_buffer = (char*)malloc(sizeof(char)*1);
+}
+
+Extra_UDP::~Extra_UDP(){
+  free(this->meta_buffer);
+  close(this->sock);
+}
+
+void Extra_UDP::init_sock(Node &mynode){
   int sockfd;
   int rv;
   struct addrinfo hints, *my_info;

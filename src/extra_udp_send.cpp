@@ -12,7 +12,7 @@
 
 #include <netinet/in.h>
 ssize_t Extra_UDP::send(Node *dest, std::vector<unsigned char> *msg){
-  if msg->size() == 0{
+  if (msg->size() == 0){
     return 0;
   }
   if (dest->is_ipv6)
