@@ -2,13 +2,17 @@
 require 'fileutils'
 require 'erb'
 
+CONFIG_FILE = 'config/dev.cfg'
+
 
 def parse_config()
-  a = [
-    ["size", 1],
-    ["ack", 3],
-  ]
-  return a
+  conf = {}
+  content = File.read(CONFIG_FILE)
+  content.split("\n").each do |line|
+    line = line.split(" ")
+    conf[line[0]] = line[1]
+  end
+  return conf
 end
 
 def create_from_erb(filename_in, filename_out)
@@ -42,9 +46,10 @@ if __FILE__ == $0
 
   FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
 
-  `cmake .`
-  `make`
+  system "cmake ."
+  system "make"
 
+  exit 0
 
   # FileUtils.rm_rf(build_dir)
 end

@@ -12,6 +12,7 @@
 
 #include <unistd.h>
 #include <string.h>
+#include <fcntl.h>
 // #include <sys/types.h>
 // #include <sys/socket.h>
 // #include <netinet/in.h>
@@ -64,5 +65,16 @@ void Extra_UDP::init_sock(Node &mynode){
   if (p == NULL) {
     throw std::system_error(errno, std::generic_category(), "failed to create/bind socket");
   }
+
+  if (rv =fcntl(sockfd, F_SETFL, O_NONBLOCK) < 0){
+    throw std::system_error(errno, std::generic_category(), std::string("fcntl() failed") + gai_strerror(rv));
+  }
+
+  // int opt = 1;
+  // if (rv = setsockopt(sockfd,SOL_SOCKET,SO_REUSEADDR|SO_REUSEPORT,&opt,sizeof(int)) < 0){
+  //   throw std::system_error(errno, std::generic_category(), std::string("fcntl() failed") + gai_strerror(rv));
+  // }
+
+
   this->sock = sockfd;
 }
