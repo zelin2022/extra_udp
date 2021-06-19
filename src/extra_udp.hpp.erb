@@ -10,11 +10,20 @@
 
 #ifndef _EXTRA_UDP_EXTRA_UDP_HPP_
 #define _EXTRA_UDP_EXTRA_UDP_HPP_
-#include "node.hpp"
 #include <vector>
 #include <string>
 #include <numeric>
 
+
+struct Node{
+public:
+  std::string host;
+  uint16_t port;
+  bool is_ipv6;
+  std::string port_string();
+  std::string get_str();
+  std::size_t get_hash();
+};
 
 class Extra_UDP{
 public:
@@ -22,17 +31,20 @@ public:
   ~Extra_UDP();
   ssize_t send(Node *dest, void *msg, int32_t size);
   ssize_t recv(Node* &src, bool want_sender_info, char* &store_location);
+  const static uint16_t M_packet_original_size = <%=%Q| #{src_config["packet_original_size"]} |%>;
+  const static uint16_t M_packet_meta_size = <%=%Q| #{src_config["packet_meta_size"]} |%>;
+  const static uint16_t M_packet_data_size = M_packet_original_size - M_packet_meta_size;
 private:
   int sock;
   char *meta_buffer;
   void init_sock(Node & mynode);
   /*
   const std::vector<std::pair<std::string, uint16_t>> header_format{
-<% src_config.each do |one_conf| %>
-    <%= %Q|std::pair<std::string, uint16_t>{std::string("#{one_conf[0]}"), #{one_conf[1]}},\n| %>
-<% end %>
+
   };
   const uint16_t header_size = std::accumulate(this->header_format.begin(), this->header_format.end(), 0, [](size_t sum, const std::pair<std::string, uint16_t> p){return sum + p.second;});
   */
 };
+
+
 #endif

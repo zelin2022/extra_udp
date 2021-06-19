@@ -4,7 +4,16 @@
 #include <thread>
 #include <cstring>
 #include <vector>
+
+void print_consts(){
+  printf("checking constants...\n");
+  printf("M_packet_original_size: %d\n", Extra_UDP::M_packet_original_size);
+  printf("M_packet_meta_size: %d\n", Extra_UDP::M_packet_meta_size);
+  printf("M_packet_data_size: %d\n", Extra_UDP::M_packet_data_size);
+}
+
 int main(){
+  print_consts();
   printf("starting server 1\n");
   Node my_addr;
   my_addr.host = std::string("127.0.0.1");

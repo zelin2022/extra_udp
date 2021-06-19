@@ -34,9 +34,9 @@ ssize_t Extra_UDP::recv(Node* &src, bool want_sender_info, char* &store_location
 
   struct sockaddr_storage addr;
   socklen_t addr_len = sizeof(addr);
-  <%=%Q|store_location = (char*) malloc(#{src_config["standard_packet_size"]}*sizeof(char));|%>
+  <%=%Q|store_location = (char*) malloc(#{src_config["packet_original_size"]}*sizeof(char));|%>
 
-  <%=%Q|ssize_t received_size = ::recvfrom(this->sock, store_location, #{src_config["standard_packet_size"]}, 0, (struct sockaddr*)&addr, &addr_len);|%>
+  <%=%Q|ssize_t received_size = ::recvfrom(this->sock, store_location, #{src_config["packet_original_size"]}, 0, (struct sockaddr*)&addr, &addr_len);|%>
 
   if (received_size <= 0){
     return received_size;
@@ -57,7 +57,7 @@ ssize_t Extra_UDP::recv(Node* &src, bool want_sender_info, char* &store_location
       src->port = ntohs(addr_v4->sin_port);
       char str[INET_ADDRSTRLEN];
       ::inet_ntop(AF_INET, &(addr_v4->sin_addr), str, INET_ADDRSTRLEN);
-      src->host = std::string(str, INET_ADDRSTRLEN);
+      src->host = std::string(str);
     }
     else if(addr.ss_family == AF_INET6)
     {

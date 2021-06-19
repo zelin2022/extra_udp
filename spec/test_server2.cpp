@@ -4,7 +4,9 @@
 #include <thread>
 #include <cstring>
 #include <iostream>
+#include <vector>
 int main(){
+  std::vector<std::string> out_str;
   printf("starting server 2\n");
   Node my_addr;
   my_addr.host = std::string("127.0.0.1");
@@ -19,7 +21,8 @@ int main(){
     char* buffer = nullptr;
     ssize_t count = my_pc.recv(recv_info, true, buffer);
     if (count > 0){
-      printf("sv2 received from %s:%d: %s\n", recv_info->host.c_str(), recv_info->port, buffer);
+      out_str.push_back(recv_info-> get_str());
+      printf("sv2 received from %s:%d(hash:%lu): %s\n", recv_info->host.c_str(), recv_info->port, recv_info->get_hash(), buffer);
       int a = my_pc.send(recv_info, buffer, count);
       if(!strcmp("the end.", buffer)){
         break;
@@ -28,6 +31,9 @@ int main(){
 
     delete (recv_info);
     free(buffer);
+  }
+  for (auto &i : out_str){
+    printf("%s\n", i.c_str());
   }
   printf("Server 2 close \n");
 }
