@@ -1,4 +1,3 @@
-#include "node.hpp"
 #include "extra_udp.hpp"
 #include <chrono>
 #include <thread>
@@ -13,6 +12,7 @@ int main(){
   my_addr.port = 22001;
   my_addr.is_ipv6 = false;
   Extra_UDP my_pc(my_addr);
+
   using namespace std::chrono_literals;
   std::this_thread::sleep_for(1000ms);
   //ssize_t recv(Node *src, bool want_sender_info, void* store_location);

@@ -31,7 +31,11 @@ if __FILE__ == $0
   build_dir = File.join(__dir__, 'build')
   src_dir = File.join(__dir__, 'src')
   output_dir = File.join(__dir__, 'output')
+  output_include_dir = File.join(output_dir, 'include')
+
   FileUtils.mkdir_p(build_dir) unless File.directory?(build_dir)
+  FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
+  FileUtils.mkdir_p(output_include_dir) unless File.directory?(output_include_dir)
 
   src_config = parse_config()
 
@@ -44,7 +48,11 @@ if __FILE__ == $0
     end
   end
 
-  FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
+  Dir[File.join(build_dir, '*')].each do |filename|
+    if filename.end_with? '.hpp'
+      FileUtils.cp(filename, output_include_dir)
+    end
+  end
 
   system "cmake ."
   system "make"
