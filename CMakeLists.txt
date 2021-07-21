@@ -7,7 +7,8 @@ add_library(${project_name} SHARED
     build/extra_udp.cpp
     build/node.cpp
     build/extra_udp_send.cpp
-    build/extra_udp_recv.cpp
+    build/extra_udp_recv_malloc.cpp
+    build/extra_udp_recv_existing.cpp
 )
 include_directories(${CMAKE_SOURCE_DIR})
 set_target_properties(${project_name} PROPERTIES VERSION ${PROJECT_VERSION})

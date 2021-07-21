@@ -13,12 +13,11 @@
 
 
 /*
-Name: recv()
+Name: recv_malloc()
 Inputs:
 pointer to source (Node)
 lag for if we want sender info
 pointer to data storage
-pointer to size of data storage
 Outputs: number of bytes received, or -1
 Description:
 if want_sender_info is false, then src will be null upon return
@@ -30,7 +29,7 @@ src if want_sender_info
 store_location if store_location_size is not positive
 */
 
-ssize_t Extra_UDP::recv(Node* &src, bool want_sender_info, char* &store_location){
+ssize_t Extra_UDP::recv_malloc(Node* &src, bool want_sender_info, char* &store_location){
 
   struct sockaddr_storage addr;
   socklen_t addr_len = sizeof(addr);
@@ -78,7 +77,3 @@ ssize_t Extra_UDP::recv(Node* &src, bool want_sender_info, char* &store_location
 
   return received_size;
 }
-
-//ssize_t Extra_UDP::recv(Node *src, bool want_sender_info, char* store_location, int len){
-
-//}

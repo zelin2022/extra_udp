@@ -30,7 +30,8 @@ public:
   Extra_UDP(Node & mynode);
   ~Extra_UDP();
   ssize_t send(Node *dest, void *msg, int32_t size);
-  ssize_t recv(Node* &src, bool want_sender_info, char* &store_location);
+  ssize_t recv_existing(Node *&src, bool want_sender_info, char* store_location, size_t len);
+  ssize_t recv_malloc(Node* &src, bool want_sender_info, char* &store_location);
   const static uint16_t M_packet_original_size = <%=%Q| #{src_config["packet_original_size"]} |%>;
   const static uint16_t M_packet_meta_size = <%=%Q| #{src_config["packet_meta_size"]} |%>;
   const static uint16_t M_packet_data_size = M_packet_original_size - M_packet_meta_size;

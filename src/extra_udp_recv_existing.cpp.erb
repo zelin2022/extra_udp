@@ -1,0 +1,79 @@
+/*
+* Filename: extra_udp.cpp
+* Author: Zelin Liu
+* Date: 2021/05/27
+* Description:
+* Instruction:
+* Copyright (c). All rights reserved.
+*/
+#include "extra_udp.hpp"
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <stdexcept>
+
+
+/*
+Name: recv_existing()
+Inputs:
+pointer to source (Node)
+lag for if we want sender info
+pointer to data storage (allocated outside function)
+pointer to size of data storage
+Outputs: number of bytes received, or -1
+Description:
+if want_sender_info is false, then src will be null upon return
+if want_sender_info is true, src will be a node allocated on heap
+if store_location_size is a positive integer then store_location will be treated as an already allocated buffer
+if store_location_size is null or non-positive, then we will peek packet size and allocate location accordingly
+Memory Allocation:
+src if want_sender_info
+store_location if store_location_size is not positive
+*/
+
+ssize_t Extra_UDP::recv_existing(Node *&src, bool want_sender_info, char* store_location, size_t len){
+  printf("recv existing\n");
+  struct sockaddr_storage addr;
+  socklen_t addr_len = sizeof(addr);
+
+  ssize_t received_size = ::recvfrom(this->sock, store_location, len, 0, (struct sockaddr*)&addr, &addr_len);
+
+  if (received_size <= 0){
+    return received_size;
+  }
+
+  // retrieving sender info
+  if (!want_sender_info)
+  {
+    src = nullptr;
+  }
+  else
+  {
+    src = new Node();
+    if (addr.ss_family == AF_INET)
+    {
+      struct sockaddr_in* addr_v4 = (struct sockaddr_in*)&addr;
+      src->is_ipv6 = false;
+      src->port = ntohs(addr_v4->sin_port);
+      char str[INET_ADDRSTRLEN];
+      ::inet_ntop(AF_INET, &(addr_v4->sin_addr), str, INET_ADDRSTRLEN);
+      src->host = std::string(str);
+    }
+    else if(addr.ss_family == AF_INET6)
+    {
+      struct sockaddr_in6* addr_v6 = (struct sockaddr_in6*)&addr;
+      src->is_ipv6 = true;
+      src->port = ntohs(addr_v6->sin6_port);
+      char str[INET6_ADDRSTRLEN];
+      ::inet_ntop(AF_INET6, &(addr_v6->sin6_addr), str, INET6_ADDRSTRLEN);
+      src->host = std::string(str, INET6_ADDRSTRLEN);
+    }
+    else
+    {
+      throw std::runtime_error("invalid ss_family");
+    }
+  }
+
+  // printf("received from %s : %d\n", src->host.c_str(), src->port);
+
+  return received_size;
+}

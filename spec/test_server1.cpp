@@ -16,7 +16,7 @@ int main(){
   printf("starting server 1\n");
   Node my_addr;
   my_addr.host = std::string("127.0.0.1");
-  my_addr.port = 22000;
+  my_addr.port = 23000;
   my_addr.is_ipv6 = false;
   Extra_UDP my_pc(my_addr);
   using namespace std::chrono_literals;
@@ -24,7 +24,7 @@ int main(){
   //send(Node *dest, std::vector<unsigned char> *msg);
   Node server2_addr;
   server2_addr.host = std::string("127.0.0.1");
-  server2_addr.port = 22001;
+  server2_addr.port = 23001;
   server2_addr.is_ipv6 = false;
   std::vector<std::string> test_cases {
     std::string("There is nothing,"),
@@ -51,11 +51,10 @@ int main(){
   }
 
   std::vector<std::string> received_cases;
-
   while(true){
     Node* recv_info = nullptr;
     char* buffer = nullptr;
-    ssize_t count = my_pc.recv(recv_info, true, buffer);
+    ssize_t count = my_pc.recv_malloc(recv_info, true, buffer);
     if (count > 0){
       printf("sv1 received: %s\n", buffer);
       received_cases.push_back(std::string(buffer, count));

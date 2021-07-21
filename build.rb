@@ -33,6 +33,10 @@ if __FILE__ == $0
   output_dir = File.join(__dir__, 'output')
   output_include_dir = File.join(output_dir, 'include')
 
+  FileUtils.rm_rf(build_dir) if File.directory?(build_dir)
+  FileUtils.rm_rf(output_dir) if File.directory?(output_dir)
+  FileUtils.rm_rf(output_include_dir) if File.directory?(output_include_dir)
+
   FileUtils.mkdir_p(build_dir) unless File.directory?(build_dir)
   FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
   FileUtils.mkdir_p(output_include_dir) unless File.directory?(output_include_dir)
