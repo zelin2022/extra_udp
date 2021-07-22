@@ -1,7 +1,7 @@
 #! /usr/bin/env ruby
 require 'fileutils'
 if __FILE__ == $0
-  output_dir = File.join(__dir__, 'output')
+  output_dir = File.join(__dir__, 'output/cpp')
   output_include_dir = File.join(output_dir, 'include')
 
   include_dest_dir = "/usr/local/include/"

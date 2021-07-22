@@ -49,3 +49,5 @@ _deps
 /output/
 # test directory
 /test/
+# tmp clone dir
+/flatbuffer_tmp/
